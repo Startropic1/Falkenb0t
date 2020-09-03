@@ -1,0 +1,19 @@
+{
+  "name": "falkenb0t",
+  "version": "1.1.0",
+  "description": "discord networking bot",
+  "main": "index.js",
+  "dependencies": {
+    "dblapi.js": "^2.4.0",
+    "discord.js": "^12.2.0",
+    "enmap": "^5.4.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
