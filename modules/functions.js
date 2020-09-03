@@ -1,15 +1,15 @@
-const Discord = require("discord.js");
-const mongoose = require('mongoose');
-const Enmap = require("enmap");
-const GuildModel = require("./schemadb/Guild");
-const config = require("../config.js");
-const fs = require("fs");
-
+const mysql = require('mysql')
 var NetIDs = [];
 var Server = [];
+
 module.exports = async (client) => {
     var conf = client.config
-    var con = mongoose.connect(`$(conf.LoginURL)`, {useNewUrlParser: true});
+    var con = mysql.createConnection({
+        host: conf.hostname,
+        user: conf.username,
+        password: conf.password,
+        database: conf.database
+    });
 
     con.connect(function(err) {
         if (err) throw err;
@@ -17,7 +17,7 @@ module.exports = async (client) => {
     });
     con.on('error', function(err) {
         if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-            mongoose.connect(con)
+            mysql.createConnection(con)
         } else {
             throw err;
         }
@@ -62,23 +62,23 @@ module.exports = async (client) => {
 
     }
     getNetIDs = () => {
-        return new Promise(resolve => {
+            return new Promise(resolve => {
 
-            con.query("SELECT NetworkID FROM USERS", function(err, result) {
-                if (err) {
-                    console.log(err)
-                } else {
-                    for (var i = 0; i < result.length; i++) {
-                        NetIDs.push(result[i].NetworkID)
+                con.query("SELECT NetworkID FROM USERS", function(err, result) {
+                    if (err) {
+                        console.log(err)
+                    } else {
+                        for (var i = 0; i < result.length; i++) {
+                            NetIDs.push(result[i].NetworkID)
+                        }
+                        resolve(NetIDs)
                     }
-                    resolve(NetIDs)
-                }
+                });
+
+
             });
-
-
-        });
-    }
-    //
+        }
+        //
 
 
 
@@ -90,7 +90,7 @@ module.exports = async (client) => {
             return;
         }
 
-        con.query("DELETE FROM USERS WHERE ServerName = " + mongoose.escape(server), function(err, result) {
+        con.query("DELETE FROM USERS WHERE ServerName = " + mysql.escape(server), function(err, result) {
             if (err) {
                 message.reply("Err Occurred ")
             } else {
@@ -101,11 +101,11 @@ module.exports = async (client) => {
     }
     client.joinNetwork = (netid, pass, server, message) => {
         if (client.Networks.has(server)) {
-            //rather than using a mongoose query, just checks network map
+            //rather than using a mysql query, just checks network map
             message.reply("Your server is already part of a network");
             return;
         }
-        con.query("SELECT * FROM USERS WHERE NetworkID = " + mongoose.escape(netid) + "AND Password = " + mongoose.escape(pass), function(err, result) {
+        con.query("SELECT * FROM USERS WHERE NetworkID = " + mysql.escape(netid) + "AND Password = " + mysql.escape(pass), function(err, result) {
             if (err) {
                 console.log(err)
                 message.reply("Err, make sure you enter both <networkid> & <pass>")
@@ -114,7 +114,7 @@ module.exports = async (client) => {
                     if (result[0].NetworkID == netid && result[0].Password == pass) {
                         //adds server to database, but excludes username, because username is only added when a network is created so that owner has special permissiomn over the network
                         //for checking if server of network is owner, just check to see if username column is null (if null that its not the owner)
-                        con.query("INSERT INTO USERS (Password,NetworkID,ServerName) VALUES (" + mongoose.escape(pass) + "," + mongoose.escape(netid) + "," + mongoose.escape(server) + ")", function(err, result) {
+                        con.query("INSERT INTO USERS (Password,NetworkID,ServerName) VALUES (" + mysql.escape(pass) + "," + mysql.escape(netid) + "," + mysql.escape(server) + ")", function(err, result) {
                             if (err) {
                                 console.log(err)
                                 message.reply("Err, make sure you enter both <networkid> & <pass>")
@@ -127,6 +127,7 @@ module.exports = async (client) => {
                         });
 
                     }
+
                 } catch {
                     message.reply("Invalid Credentials")
 
@@ -141,12 +142,12 @@ module.exports = async (client) => {
 
         //check to make sure this server isn't already part of another network
         if (client.Networks.has(server)) {
-            //rather than using a mongoose query, just checks network map
+            //rather than using a mysql query, just checks network map
             message.reply("Your server is already part of a network");
             return;
         }
 
-        con.query("INSERT INTO USERS (Username,Password,NetworkID,ServerName) VALUES (" + mongoose.escape(user) + "," + mongoose.escape(pass) + "," + mongoose.escape(networkid) + "," + mongoose.escape(server) + ")", function(err, result) {
+        con.query("INSERT INTO USERS (Username,Password,NetworkID,ServerName) VALUES (" + mysql.escape(user) + "," + mysql.escape(pass) + "," + mysql.escape(networkid) + "," + mysql.escape(server) + ")", function(err, result) {
             if (err) {
                 console.log(err)
                 message.reply("Err, make sure you enter both <networkid> & <pass>")
@@ -158,11 +159,12 @@ module.exports = async (client) => {
 
         });
     }
-
-    client.reactionCollector = (message, usr) => {
+   
+   client.reactionCollector = (message, usr) => {
             
 
       var page = 0;
+
     //nested func 
         function reactionAwait(){
             //this updates message everytime emoji is reacted, returns page value, incase it was edited due to an error
@@ -230,7 +232,7 @@ module.exports = async (client) => {
                         name: "Permission Level",
                         value: command.config.permLevel
                     }
-
+                   
                     ],
                     footer: {
                             
