@@ -1,5 +1,7 @@
-# Disnet
+# Falkenb0t(Disnet)
        
+9/3/2020 - Updated code from Discord.js v11 to Discord.js v12
+
 Disnet is a discord bot that allows you to connect multiple discord servers into a network. Disnet allows you to broadcast messages to all the discord servers in your network. So if you have multiple servers and want a way to link them together, than disnet is a viable solution.
 
  
@@ -25,6 +27,8 @@ Only give your password to servers that you want to join, otherwise anyone can j
 
 
 ## Planned Ideas
+- Convert SQL db system over to Mongoose/MongoDB
+- Expand connectivity across more channels
 - Poll system - Admins can host network wide polls 
 - Network wide moderation tools
 
