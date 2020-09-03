@@ -19,7 +19,7 @@ exports.run = (client, message, args) => {
 exports.help = {
   name: "clear",
   description: "Bulk deletes botmessages & commands in channel it was called",
-  usage: "b!clear"
+  usage: "N$clear"
 };
 exports.config = {
   permLevel: "admin"

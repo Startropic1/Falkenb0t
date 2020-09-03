@@ -6,7 +6,7 @@ exports.run = async (client, message, args) => {
 exports.help = {
   name: "ping",
   description: "it pings?",
-  usage: "b!ping"
+  usage: "N$ping"
 };
 exports.config = {
   permLevel: "user"

@@ -18,7 +18,7 @@ message.reply(`${commandName} has been reloaded`)
 exports.help = {
   name: "reload",
   description: "reloads command cache",
-  usage: "b!reload <Command>"
+  usage: "N$reload <Command>"
 };
 exports.config = {
   permLevel: "owner"

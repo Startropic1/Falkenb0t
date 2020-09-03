@@ -7,5 +7,5 @@ exports.config = {
 exports.help = {
     name: "invite",
     description: "Give's bot invite link",
-    usage: "b!invite"
+    usage: "N$invite"
 };

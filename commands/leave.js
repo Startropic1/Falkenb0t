@@ -1,12 +1,12 @@
 exports.run = (client, message, args) => {
 
-	client.leaveNetwork(message.guild.name, message);
+	client.leaveNetwork(message.guild.id, message);
 	
 }
 exports.help = {
   name: "leave",
   description: "leaves networks",
-  usage: "b!leave"
+  usage: "N$leave"
 };
 exports.config = {
   permLevel: "admin"

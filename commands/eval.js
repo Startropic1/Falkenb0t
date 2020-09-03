@@ -44,7 +44,7 @@ const clean = text => {
 exports.help = {
   name: "eval",
   description: "runs input code",
-  usage: "b!eval <code>"
+  usage: "N$eval <code>"
 };
 exports.config = {
   permLevel: "owner"

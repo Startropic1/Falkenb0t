@@ -6,7 +6,7 @@ message.channel.send(os.cpus())
 }
 exports.help = {
 name: "server info",
-usage: "b!server"
+usage: "N$server"
 }
 exports.config = {
 	permLevel: "owner"

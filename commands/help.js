@@ -9,7 +9,7 @@ exports.run = async (client, message, args) => {
             }
     if(args[0] == "-list"){
          cmds = commandnames.join(",")
-        message.channel.send("**Commands:** \n"+ cmds + "\n For a description of each use b!help <Command>")
+        message.channel.send("**Commands:** \n"+ cmds + "\n For a description of each use N$help <Command>")
         return
     }
     if (!args[0]) {
@@ -54,5 +54,5 @@ exports.config = {
 exports.help = {
     name: "help",
     description: "Gives info on a certain command",
-    usage: "b!help <Command>"
+    usage: "N$help <Command>"
 };

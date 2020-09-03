@@ -1,9 +1,9 @@
 exports.run = (client, message, args) => {
     //if channel dosen't exist, than create server
-    var server = message.guild.channels;
+    var server = message.guild.channels.cache;
     //todo make so only admin/mods can type in broadcast - https://discordjs.guide/popular-topics/permissions.html#terminology
     if (!server.find(server => server.name === "broadcast")) {
-        message.guild.createChannel("broadcast", {
+        message.guild.channels.create("broadcast", {
             type: "text"
         });
     } else {
@@ -11,7 +11,7 @@ exports.run = (client, message, args) => {
     }
 
     if (!server.find(server => server.name === "network-userchat")) {
-        message.guild.createChannel("network-userchat", {
+        message.guild.channels.create("network-userchat", {
             type: "text"
         });
     } else {
@@ -21,7 +21,7 @@ exports.run = (client, message, args) => {
 exports.help = {
     name: "setup",
     description: "adds channels - #broadcast, #network-userchat",
-    usage: "b!setup"
+    usage: "N$setup"
 }
 exports.config = {
     permLevel: "admin"

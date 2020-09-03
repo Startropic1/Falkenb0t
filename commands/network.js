@@ -1,6 +1,6 @@
 exports.run = (client, message, args) => {
   var ServerCount = 0;
-  var Sender = client.Networks.get(message.guild)
+  var Sender = client.Networks.get(message.guild.id)
 console.log(Sender)
 if(Sender == null){
   message.reply("You are not a part of a network!")
@@ -8,7 +8,7 @@ if(Sender == null){
 }
 
 
- var serverlist = client.guilds.array();
+ var serverlist = client.guilds.cache.size;
 
 
         for (var i = 0; i < serverlist.length; i++) {
@@ -37,7 +37,7 @@ if(Sender == null){
 exports.help = {
  name: "network",
   description: "returns network info (Network id & # of Servers on Network)",
-  usage: "b!network"
+  usage: "N$network"
 }
 exports.config = {
   permLevel: "admin"

@@ -1,67 +1,52 @@
+const Discord = require('discord.js')
 exports.run = (client, message, args) => {
-    var serverlist = client.guilds.array();
+    let serverlist = client.guilds.cache.array(); // Grabs the Guilds.
     console.log(client.Networks)
 
-    var server = message.guild.channels;
-    var Sender = client.Networks.get(message.guild.name);
-    const input = args.join(" "); //rejoins arg array into string
-    for (var i = 0; i < serverlist.length; i++) {
-        //get network id of message sender
-        var Recipient = client.Networks.get(serverlist[i].name);
-        Recipient = parseInt(Recipient);
-
-
-
-        if (Sender == Recipient) {
-            try {
-                var serv = serverlist[i].channels.find(
-                    serv => serv.name === "broadcast"
-                );
-                serv.send({
-                    embed: {
-
-                        /* author: { works but is disabled, because not sure if i like the look
-                           name: "Disnet", 
-                           icon_url: client.user.defaultAvatarURL
-                         },*/
-                        color: 0x3850eb,
-                        title: "**__BROADCAST__**",
-
-                        thumbnail: {
-                            url: message.guild.iconURL
-                        },
-                        fields: [{
-                                name: "Broadcasted From ",
-                                value: message.guild.name
-                            }, {
-
-                                name: "Message",
-                                value: input
-                            }
-
-                        ],
-                        timestamp: new Date(),
-                        footer: {
-                            icon_url: message.author.avatarURL,
-                            text: "Executed By " + message.author.username
-
-                        }
-                    }
-                })
-            } catch (error) {
-                console.log(error);
-                message.reply(
-                    "You must create a #broadcast channel to recieve messages!"
-                );
-                break;
-            }
-        }
-    }
+    const server = message.guild.id; // Key for client.Networks
+    console.log(server)
+    let Sender = client.Networks.get(server); // Key is already defined with 'server' there is no point typing it out again unless it is different.
+    console.log('[1]')
+    const input = args.join(" "); // Joins the arguments together.
+    console.log('[2]')
+    for (let i = 0; i < serverlist.length; i++) {
+        console.log(i)
+      let Recipient = client.Networks.get(serverlist[i].id);
+        console.log(Sender)
+        console.log(Recipient)
+      //Recipient = parseInt(Recipient);
+      if (Sender == Recipient) {
+      //if (server === serverlist[i].id) {
+      //client.Networks.ForEach((server, value) => {
+        console.log('[2.5]')
+        try {
+          console.log('[3]')
+          if (!serverlist[i].channels.cache.find(channel => channel.name === 'broadcast')) continue; // If the channel it just skips it, and starts from the top again.
+          console.log('[4]')
+          let channel = serverlist[i].channels.cache.find(channel => channel.name === 'broadcast'); // Gets the 'broadcast' channel.
+          console.log('[5]')
+          //Created an embed (I prefer this type of embed)
+          let embed = new Discord.MessageEmbed()
+            .setColor('0x3850eb')
+            //.setAuthor(client.user.username, client.user.avatarURL()) // You have disabled.
+            .setThumbnail(message.guild.iconURL())
+            .addFields({name: 'Broadcasted from', value: message.guild.name}, {name: 'Message', value: input})
+            .setFooter(`Execute by ${message.author.username}`, message.author.avatarURL())
+            .setTimestamp() 
+            console.log('[6]')
+          channel.send(embed) // Sends the embed to the channel.
+        } catch (error) {
+          console.log(error);
+          message.reply('You must create a #broadcast channel to receive messages!'); 
+          break;
+        };
+      };
+    };
 };
 exports.help = {
     name: "broadcast",
     description: "Broadcasts message to all servers on your network",
-    usage: "b!broadcast <Message>"
+    usage: "N$broadcast <Message>"
 };
 exports.config = {
     permLevel: "admin"
